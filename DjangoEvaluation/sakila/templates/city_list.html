@@ -37,29 +37,32 @@
     <!-- Grille des villes -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl animate-fade-in-slow">
         {% for city in cities %}
-        <div
-            class="bg-white bg-opacity-95 shadow-lg rounded-3xl p-6 transform transition duration-300 hover:scale-105 hover:shadow-2xl flex flex-col justify-between">
-            <div class="flex items-center space-x-4">
-                <span class="inline-block px-4 py-2 rounded-full bg-blue-600 text-white font-bold text-lg select-none">
-                    {{ city.city_id }}
-                </span>
-                <div>
-                    <p class="text-2xl font-semibold text-blue-900">{{ city.city }}</p>
-                    <p class="text-sm text-gray-600 italic">({{ city.country.country }})</p>
+        <a href="{% url 'city_detail' city.city_id %}" class="block">
+            <div
+                class="bg-white bg-opacity-95 shadow-lg rounded-3xl p-6 transform transition duration-300 hover:scale-105 hover:shadow-2xl flex flex-col justify-between">
+                <div class="flex items-center space-x-4">
+                    <span class="inline-block px-4 py-2 rounded-full bg-blue-600 text-white font-bold text-lg select-none">
+                        {{ city.city_id }}
+                    </span>
+                    <div>
+                        <p class="text-2xl font-semibold text-blue-900">{{ city.city }}</p>
+                        <p class="text-sm text-gray-600 italic">({{ city.country.country }})</p>
+                    </div>
                 </div>
+                {% if city.capital == 1 %}
+                    <span
+                        class="self-start mt-4 inline-block px-3 py-1 rounded-full bg-green-500 text-white text-xs font-semibold uppercase tracking-wide select-none">
+                        Capitale
+                    </span>
+                {% endif %}
             </div>
-            {% if city.capital == 1 %}
-                <span
-                    class="self-start mt-4 inline-block px-3 py-1 rounded-full bg-green-500 text-white text-xs font-semibold uppercase tracking-wide select-none">
-                    Capitale
-                </span>
-            {% endif %}
-        </div>
+        </a>
         {% empty %}
         <div class="col-span-full text-center text-gray-600 text-lg font-medium">
             Aucune ville trouvée.
         </div>
         {% endfor %}
+        
     </div>
 
     <!-- Bouton retour -->

@@ -20,6 +20,7 @@ class City(models.Model):
     country = models.ForeignKey('Country', on_delete=models.CASCADE)
     capital = models.IntegerField()  # 0 ou 1, directement mapping TINYINT
     last_update = models.DateTimeField(auto_now=True)
+    picture = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table = 'city'

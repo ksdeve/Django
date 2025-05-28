@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détail de {{ city.city }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-tr from-blue-100 via-green-100 to-teal-100 min-h-screen flex flex-col items-center p-10 font-sans">
+    <h1 class="text-4xl font-extrabold mb-6">🏙️ {{ city.city }}</h1>
+    <p class="text-lg mb-4">Pays : {{ city.country.country }}</p>
+    {% if image_base64 %}
+        <img src="data:image/jpeg;base64,{{ image_base64 }}" alt="Photo de {{ city.city }}" class="rounded-xl shadow-lg w-96 mb-6">
+    {% else %}
+        <p class="text-gray-500 mb-6">Aucune photo disponible pour cette ville.</p>
+    {% endif %}
+    <a href="{% url 'city_list' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full shadow-md transition duration-300">
+        ⬅ Retour à la liste des villes
+    </a>
+</body>
+</html>

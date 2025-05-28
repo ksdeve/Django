@@ -3,7 +3,7 @@ from datetime import datetime
 from sakila.models import Country
 from sakila.models import City
 from django.shortcuts import render, get_object_or_404
-
+import base64
 
 def status(request):
     h = datetime.now().strftime("%Y-%m- %d - %H:%M:%S")
@@ -29,3 +29,9 @@ def cities_by_country(request, country_id):
     country = Country.objects.get(pk=country_id)
     return render(request, 'cities_by_country.html', {'cities': cities, 'country': country})
 
+def city_detail(request, city_id):
+    city = get_object_or_404(City, pk=city_id)
+    image_base64 = None
+    if city.picture:
+        image_base64 = base64.b64encode(city.picture).decode('utf-8')
+    return render(request, 'city_detail.html', {'city': city, 'image_base64': image_base64})
