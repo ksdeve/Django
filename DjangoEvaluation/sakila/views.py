@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 
 def status(request):
     h = datetime.now().strftime("%Y-%m- %d - %H:%M:%S")
-    cname = "Kévin S"
+    cname = "Kévin Salmon, Bradley Mutima"
     return render(request, 'banniere.html', {'hours': h, 'cname': cname})
 
 def country_list(request):
@@ -16,8 +16,12 @@ def country_list(request):
 
 
 def city_list(request):
-    cities = City.objects.select_related('country').all()
-    return render(request, 'city_list.html', {'cities': cities})
+    show_capitals = request.GET.get('capital', '0')  # '0' = toutes, '1' = capitales uniquement
+    if show_capitals == '1':
+        cities = City.objects.select_related('country').filter(capital=1)
+    else:
+        cities = City.objects.select_related('country').all()
+    return render(request, 'city_list.html', {'cities': cities, 'show_capitals': show_capitals})
 
 
 def cities_by_country(request, country_id):
