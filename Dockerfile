@@ -1,24 +1,9 @@
-FROM python:3.13.3-slim
+FROM python:3.11
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+WORKDIR /app
 
-WORKDIR /app/DjangoEvaluation
-
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    default-libmysqlclient-dev \
-    python3-dev \
-    pkg-config \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY requirements.txt /app/DjangoEvaluation/
-
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN apt-get update && apt-get install -y default-mysql-client
 
 COPY . /app/
-
-EXPOSE 8000
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -1,22 +1,33 @@
-version: "3.9"
+version: '3.8'
 
 services:
   db:
     image: mysql:8.0
+    container_name: mysql
     restart: always
     environment:
       MYSQL_DATABASE: sakila
+      MYSQL_PASSWORD: Hitema2025
       MYSQL_ROOT_PASSWORD: Hitema2025
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./db:/docker-entrypoint-initdb.d  # <== montage du dossier contenant les dumps
     ports:
       - "3306:3306"
-
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    container_name: django-web
+    command: >
+      sh -c "
+         until mysqladmin ping -h db -u root -pHitema2025 --silent; do
+          echo 'Waiting for MySQL...';
+          sleep 2;
+          done;
+           python DjangoEvaluation/manage.py migrate &&
+           python DjangoEvaluation/manage.py runserver 0.0.0.0:8000
+      "
+    image: django-web
     volumes:
       - .:/app
     ports:
@@ -24,8 +35,12 @@ services:
     depends_on:
       - db
     environment:
-      MYSQL_DATABASE: sakila
-      MYSQL_ROOT_PASSWORD: Hitema2025
+      - DJANGO_SETTINGS_MODULE=DjangoEvaluation.settings
+      - MYSQL_DATABASE=sakila
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=Hitema2025
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
 
 volumes:
-  mysql_data:
+  db_data:
